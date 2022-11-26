@@ -6,18 +6,120 @@
     --clear-btn-height: 100px;
     --clear-btn-width: 400px;
     --clear-btn-font-size: 32px;
-    --clear-btn-color: aquamarine; 
-
+    --clear-btn-color: #e0c6ff; 
     --btn-border-radius: 10px;
-    --hover-shadow: brightness(98%);
-
+    --hover-shadow: brightness(105%);
     --alert-font-size: 24px;
+    --border-radius: 20px;
+    --font: 'Poppins', sans-serif;
+    --gameboard-font: 'Montserrat', sans-serif;
 
 }
 
 body {
     padding-top: 100px;
+    font-family: var(--font);
+    background-color: rgb(246, 247, 247);
 }
+
+/* Form Container */
+
+.form-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.heading {
+    font-size: 52px;
+}
+
+.player-option {
+    display: flex;
+    gap: 400px;
+    font-size: 40px;
+}
+
+.multiplayer, .ai {
+    height: 60px;
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: solid 3px black;
+}
+
+.form-display {
+    display: none;
+}
+
+.multiplayer:hover, .ai:hover {
+    cursor: pointer;
+}
+
+.selected-option {
+    color: white;
+    background-color: black;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    background-color: #e0c6ff;
+    height: 500px;
+    width: 1000px;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-info {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    font-size: 32px;;
+}
+
+.form-info input {
+    font-size: 30px;
+    border-radius: 5px;
+    border-style: none;
+}
+
+.input-container {
+    display: flex;
+    gap: 40px;
+}
+
+.player-1, .player-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-info button {
+    font-size: 32px;
+    border-radius: var(--border-radius);
+    height: 70px;
+    width: 400px;
+}
+
+.form-info button:hover {
+    cursor: pointer;
+}
+
 
 
 /* Main Container */
@@ -35,11 +137,24 @@ body {
 /* Notification Div */
 
 #notification-div {
-    color: red;
-    font-size: var(--alert-font-size);
     position: fixed;
     top: 40px;
     font-weight: bold;
+}
+
+.oops-notif {
+    color: red;
+    font-size: var(--alert-font-size);
+}
+
+.winner-notif-style {
+    color: #A760FF;
+    font-size: calc(var(--alert-font-size) * 1.4);
+}
+
+.nobody-wins {
+    color: rgb(104, 107, 255);
+    font-size: calc(var(--alert-font-size) * 1.4);
 }
 
 
@@ -79,12 +194,13 @@ body {
     flex-wrap: wrap;
     width: var(--gameboard-dimension);
     height: var(--gameboard-dimension);
+    font-family: var(--gameboard-font);
 }
 
 .board-squares {
     height: var(--square-dimension);
     width: var(--square-dimension);
-    background-color: rgb(186, 186, 186);
+    background-color: rgba(0, 0, 0, 0.2);
     border: solid 1px white;
     font-size: var(--sq-font-size);
     display: flex;
@@ -94,13 +210,30 @@ body {
 
 .board-squares:hover {
     cursor: pointer;
-    filter: var(--hover-shadow);
+    background-color: rgb(209, 209, 209);
 }
 
+.s0 {
+    border-top-left-radius: var(--border-radius);
+}
+
+.s2 {
+    border-top-right-radius: var(--border-radius);
+}
+
+.s6 {
+    border-bottom-left-radius: var(--border-radius);
+}
+
+.s8 {
+    border-bottom-right-radius: var(--border-radius);
+}
 
 /* Clear Btn */
 
 #clear-btn {
+    font-family: var(--font);
+    font-weight: 500;
     background-color: var(--clear-btn-color);
     height: var(--clear-btn-height);
     width: var(--clear-btn-width);
@@ -112,4 +245,11 @@ body {
 #clear-btn:hover {
     cursor: pointer;
     filter: var(--hover-shadow);
+    scale: 1.025;
+}
+
+/* Disable Clicks */
+
+.disable-clicks {
+    pointer-events: none;
 }

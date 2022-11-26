@@ -1,10 +1,12 @@
 // PubSub/Mediator
 var events = {
     events: {},
+
     on: function (eventName, fn) {
       this.events[eventName] = this.events[eventName] || [];
       this.events[eventName].push(fn);
     },
+
     off: function(eventName, fn) {
       if (this.events[eventName]) {
         for (var i = 0; i < this.events[eventName].length; i++) {
@@ -16,36 +18,76 @@ var events = {
       }
     },
     emit: function (eventName, data) {
-      if (this.events[eventName]) {
-        this.events[eventName].forEach(function(fn) {
-          fn(data);
-        });
-      }
+        if (this.events[eventName]) {
+            this.events[eventName].forEach(function(fn) {
+              fn(data);
+            });
+          }
     }
   };
-  
+
+// Beginning Form Popup
+(function() {
+    let formHandler = {
+
+        selectedOptionClass: 'selected-option',
+
+        init: function() {
+            this.cacheDOM();
+            this.bindEvents();
+            this.multiplayer.classList.add(this.selectedOptionClass);
+        },
+
+        cacheDOM: function() {
+            this.formPopup = document.querySelector('.form-container');
+            this.multiplayer = document.querySelector('.multiplayer');
+            this.ai = document.querySelector('.ai');
+            this.submitFormBtn = document.querySelector('#form-submit-btn');
+        },
+
+        bindEvents: function() {
+            this.multiplayer.addEventListener('click', this.changeOption.bind(this));
+            this.ai.addEventListener('click', this.changeOption.bind(this));
+        },
+
+        changeOption: function(e) {
+            console.log(e.target.classList)
+            console.log(e.target.classList[0]);
+
+            // Clicking on Multiplayer Option
+            if (e.target.classList === 'multiplayer') {
+                if (this.ai.classList.contains(this.selectedOptionClass)) {
+                    this.ai.classList.remove(this.selectedOptionClass);
+                } 
+            } else {
+                if (this.multiplayer.classList.contains(this.selectedOptionClass)) {
+                    this.multiplayer.classList.remove(this.selectedOptionClass);
+                } 
+            }
+            e.target.classList.add(this.selectedOptionClass);
+            
+        },
+
+
+
+    }
+
+    formHandler.init();
+})();
+
 
 // Game Board Module
 (function() {
 
     let gameBoard = {
 
-        gameboard: ["", "", "", "", "", "", "", "", ""],
-        markContent: "X",
+        data: {markContent: this.markContent, turn: this.turn, gameboard: this.gameboard},
+
+        oopsClass: 'oops-notif',
 
         init: function() {
-            console.log(`The gameBoard init fxn is getting initialized`);
             this.cacheDOM();
             this.bindEvents();
-            this.render();
-            events.on('initialDataTransfer', this.dataSetter);
-
-        },
-
-        dataSetter: function(data) {
-            console.log(`This dataSetter fxn is getting activated`)
-            console.log(`This is the data passed over: ${data}`);
-            console.log(`What the fuck`)
         },
 
         cacheDOM: function() {
@@ -56,43 +98,68 @@ var events = {
         },
 
         bindEvents: function() {
+            events.on('initialDataTransfer', this.dataSetter.bind(this));
+            events.on('dataTransfer', this.dataSetter.bind(this));
+            events.on('initialDataTransfer', this.render.bind(this));
             this.gameBoardDOMElem.addEventListener('click', this.clickHandler.bind(this));
             this.clearBoardBtn.addEventListener('click', this.clearBoard.bind(this));
-            events.on('newPlayerMarkSet', this.markHandler.bind(this));
-            // events.on('initialDataTransfer', this.dataSetter.bind(this));
+            events.on('globalUpdate', this.dataSetter.bind(this));
+            // events.on('newPlayerMarkSet', this.markHandler.bind(this));
+        },
+
+        dataSetter: function(data) {
+            console.log(`This is the data received in data setter within the GAMEBOARD MODULE `)
+            console.log(data)
+
+            this.gameboard = data['gameboard'];
+            this.markContent = data['markContent'];
+            this.turn = data['turn'];
+
+            this.data = {markContent: this.markContent, turn: this.turn, gameboard: this.gameboard};
         },
 
         clickHandler: function(e) {
+            console.log(`This is clickHandler`)
+            console.log(this.gameboard)
+            console.log(e);
+            console.log(e.target);
+            console.log('id: ', e.target.id);
+            console.log('square length: ', this.gameboard[e.target.id].length);
             if (this.gameboard[e.target.id].length === 0) {
                 this.addSelectionToGameBoardArray(e);
+                events.emit('updateData', this.data);
             } else {
+                this.notificationDiv.classList.add(this.oopsClass);
                 this.notificationDiv.innerText = "You cannot select a square that's already been chosen.";
             }
         },
 
-        markHandler: function(mark) {
-            this.markContent = mark;
+        sendDataTransferValues: function() {
+            console.log(`This is the data before sending it`)
+            console.log(this.data)
+            events.emit('dataTransfer', this.data);
         },
 
-        addSelectionToGameBoardArray: function (e) {
+        addSelectionToGameBoardArray: function(e) {
             if (this.notificationDiv.innerText.length > 0) {
                 this.notificationDiv.innerText = '';
             }
             this.gameboard[e.target.id] = this.markContent;
-            console.log(this.gameboard);
             this.render();
-            events.emit('turnChanged', this.markContent);
+            this.sendDataTransferValues();
+            events.emit('turnChanged');
         },
 
         clearBoard: function() {
-            this.gameboard = ["", "", "", "", "", "", "", "", ""];
-            console.log(`This is gameboard after clearBoard: ${this.gameboard}`);
-            this.render();
             events.emit('clearBoardResetTurnOnScreen');
-            events.emit('resetPlayerTurnDefault');
+            // events.emit('resetPlayerTurnDefault');
+            events.emit('resetBoard');
+            this.render();
+            console.log(`This is gameboard after clearBoard: ${this.gameboard}`);
+            this.notificationDiv.innerText = '';
         },
 
-        render: function () {
+        render: function() {
             this.i = 0
             this.boardSquares.forEach(square => {
                 square.innerText = this.gameboard[this.i];
@@ -108,9 +175,11 @@ var events = {
 const turnModule = (function() {
 
     let turnHandler = {
+
+    data: {markContent: this.markContent, turn: this.turn, gameboard: this.gameboard},
     
-    // On Initialization, Player 1's turn is first
-    player1Turn: true,
+    // // On Initialization, Player 1's turn is first
+    // player1Turn: true,
 
     init: function() {
         this.cacheDOM();
@@ -124,19 +193,51 @@ const turnModule = (function() {
     },
 
     bindEvents: function() {
+        events.on('dataTransfer', this.dataSetter.bind(this));
         events.on('turnChanged', this.changePlayerTurn.bind(this));
+        events.on('initialDataTransfer', this.dataSetter.bind(this));
+        events.on('globalUpdate', this.dataSetter.bind(this));
+        
         events.on('clearBoardResetTurnOnScreen', this.resetTurnOnScreen.bind(this));
-        events.on('resetPlayerTurnDefault', this.resetPlayerTurnDefault.bind(this));
+        // events.on('resetPlayerTurnDefault', this.resetPlayerTurnDefault.bind(this));
+    },
+
+    dataSetter: function(data) {
+        console.log(`This is the data received in data setter within the TURNHANDLER MODULE: `)
+        console.log(data)
+        this.gameboard = data['gameboard'];
+        this.markContent = data['markContent'];
+        this.turn = data['turn'];
+        console.log(this.gameboard);
+
+        this.data = {markContent: this.markContent, turn: this.turn, gameboard: this.gameboard};
+
+        console.log(`This is this.data`)
+        console.log(this.data);
+    },
+
+    sendDataTransferValues: function() {
+        console.log(this.data)
+        events.emit('globalUpdate', this.data);
     },
     
     // Change Player Turn
-    changePlayerTurn: function(playersMark) {
-        if (playersMark === "X") {
-            this.player1Turn = false;
+    changePlayerTurn: function() {
+        if (this.turn) {
+            this.turn = false;
+            console.log('This.turn is now false: ', this.turn);
         } else {
-            this.player1Turn = true;
+            this.turn = true;
+            console.log('This.turn is now true: ', this.turn);
         }
-        this.changePlayerTurnOnScreen(this.player1Turn);
+
+        this.data.turn = this.turn;
+
+        this.sendDataTransferValues();
+        this.changePlayerTurnOnScreen(this.turn);
+        console.log(this.turn);
+        console.log(`This is the this.data after changeplayerturn: `);
+        console.log(this.data);
     },
 
     // Change Player Indicated turn on screen
@@ -190,7 +291,7 @@ const PlayerModule = (function() {
         player1: Player('player1', "X"),
         player2: Player('player2', "O"),
 
-        markToSend: "X",
+        data: {markContent: this.markContent, turn: this.turn, gameboard: this.gameboard},
 
         init: function() {
             this.bindEvents();
@@ -198,24 +299,38 @@ const PlayerModule = (function() {
 
         bindEvents: function() {
             events.on('turnChangedSetMark', this.emitMark.bind(this))
+            events.on('initialDataTransfer', this.dataSetter.bind(this));
+            events.on('globalUpdate', this.dataSetter.bind(this));
         },
 
-        emitMark: function(currentPlayerTurn) {
+        dataSetter: function(data) {
+            console.log(`This is the data received in data setter within the PLAYER EVENT HANDLER MODULE: `)
+            console.log(data)
+            this.gameboard = data['gameboard'];
+            this.markContent = data['markContent'];
+            this.turn = data['turn'];
+            console.log(this.gameboard);
+    
+            this.data = {markContent: this.markContent, turn: this.turn, gameboard: this.gameboard};
+    
+            console.log(`This is this.data`)
+            console.log(this.data);
+        },
+
+        emitMark: function() {
 
             console.log(`This is the mark of player1: ${this.player1.mark}`);
             console.log(`This is the mark of player2: ${this.player2.mark}`)
 
             // Player1's Turn
-            if (currentPlayerTurn) {
-                this.markToSend = this.player1.mark;
+            if (this.data['turn']) {
+                this.data['markContent'] = this.player1.mark;
             } 
-            
             // Player2's Turn
             else {
-                this.markToSend = this.player2.mark;
+                this.data['markContent'] = this.player2.mark;
             }
-
-            events.emit('newPlayerMarkSet', this.markToSend)
+            events.emit('globalUpdate', this.data)
 
         }
     }
@@ -223,3 +338,130 @@ const PlayerModule = (function() {
     playerEventHandler.init();
 
 })();
+
+  // Data Transfer Module
+
+  const dataTransferModule = (function () {
+    let dataTransfer = {
+                      
+        data: {},
+
+        winningCombos: [
+            // Across
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+        
+            // Downwards
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+        
+            // Diagonal
+            [2, 4, 6],
+            [0, 4, 8]
+        ],
+
+        disableClicksClass: 'disable-clicks',
+        winnerStyling: 'winner-notif-style',
+        nobodyWinsClass: 'nobody-wins',
+
+        init: function() {
+            this.cacheDOM();
+            this.setInitialValues();
+            this.bindEvents();
+        },
+
+        setInitialValues: function() {
+            this.data = {markContent: "X", turn: true, gameboard: ["", "", "", "", "", "", "", "", ""]}
+            console.log('This is the dataTrsfr data settting initial values: ', this.data);
+            events.emit('initialDataTransfer', this.data);
+
+            if (this.gameBoardDOMElem.classList.contains(this.disableClicksClass)) {
+                this.enableClicks();
+            }
+        }, 
+
+        cacheDOM: function() {
+            this.gameBoardDOMElem = document.querySelector('#gameboard');
+            this.notificationDiv = document.querySelector('#notification-div');
+        },
+
+        bindEvents: function() {
+            events.emit('initialDataTransfer', this.data);
+            events.on('updateData', this.updateValues.bind(this));
+            events.on('resetBoard', this.setInitialValues.bind(this));
+        },
+
+        updateValues: function(data) {
+            this.data = data;
+            console.log('This is the dataTrsfr data update of GLOBAL VALUES: ', this.data);
+            this.checkForWinner(this.data);
+        },
+
+        checkForWinner: function(data) {
+
+            for (let combo of this.winningCombos) {
+                let comboArray = [];
+
+                for (let index of combo) {
+
+                    comboArray.push(data.gameboard[index]);
+
+                    if (data.gameboard[index] === '') {
+                        break;
+                    };
+                }
+
+                console.log(`This is the comboArray: `, comboArray)
+                
+                const winningCombo = arr => arr.every(item => item === arr[0]);
+                let gameOver = winningCombo(comboArray);
+
+                if (gameOver & comboArray.length === 3) {
+
+                    console.log(`Game over!`);
+                    console.log('This is the game result: ', gameOver);
+                    this.disableClicks();
+                    this.winnerHandler(comboArray[0]);
+                    break;
+                }
+
+                if (!gameOver && data.gameboard.includes('') === false) {
+
+                    this.notificationDiv.innerText = "Nobody Wins. Lol"
+                    this.notificationDiv.classList.add(this.nobodyWinsClass);
+                    this.disableClicks();
+                }
+            }
+
+            // events.emit('globalUpdate', this.data);
+        },
+
+        enableClicks: function() {
+            this.gameBoardDOMElem.classList.remove(this.disableClicksClass);
+        },
+
+        disableClicks: function() {
+            this.gameBoardDOMElem.classList.add(this.disableClicksClass);
+        },
+
+        winnerHandler: function(winner) {
+            if (winner === 'O' || winner === "AI") {
+                this.winner = 'Player 2';
+            }
+            else {
+                this.winner = 'Player 1';
+            }
+            this.notificationDiv.classList.add(this.winnerStyling);
+            this.notificationDiv.innerText = `The winner is: ${this.winner}!`;
+        },
+    }
+
+    dataTransfer.init();
+
+})();
+
+
+
+

@@ -32,10 +32,15 @@ var events = {
 
         selectedOptionClass: 'selected-option',
 
+        mForm: '.multiplayer-form',
+        aForm: '.ai-form',
+        yeet: 'yeet',
+
         init: function() {
             this.cacheDOM();
             this.bindEvents();
             this.multiplayer.classList.add(this.selectedOptionClass);
+            this.aiForm.classList.add(this.yeet);
         },
 
         cacheDOM: function() {
@@ -43,6 +48,8 @@ var events = {
             this.multiplayer = document.querySelector('.multiplayer');
             this.ai = document.querySelector('.ai');
             this.submitFormBtn = document.querySelector('#form-submit-btn');
+            this.multiplayerForm = document.querySelector(this.mForm);
+            this.aiForm = document.querySelector(this.aForm);
         },
 
         bindEvents: function() {
@@ -55,13 +62,23 @@ var events = {
             console.log(e.target.classList[0]);
 
             // Clicking on Multiplayer Option
-            if (e.target.classList === 'multiplayer') {
+            if (e.target.classList[0] === 'multiplayer') {
                 if (this.ai.classList.contains(this.selectedOptionClass)) {
+                    // Highlight Multiplayer Option
                     this.ai.classList.remove(this.selectedOptionClass);
+                    // Display Multiplayer Form & Hide AI Form
+                    this.multiplayerForm.classList.remove(this.yeet);
+                    this.aiForm.classList.add(this.yeet);
                 } 
+
             } else {
                 if (this.multiplayer.classList.contains(this.selectedOptionClass)) {
+                    // Highlight AI Option
                     this.multiplayer.classList.remove(this.selectedOptionClass);
+
+                    // Display AI Form & Hide Multiplayer Form
+                    this.aiForm.classList.remove(this.yeet);
+                    this.multiplayerForm.classList.add(this.yeet);
                 } 
             }
             e.target.classList.add(this.selectedOptionClass);

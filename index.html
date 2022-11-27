@@ -23,7 +23,8 @@
                 <div class="multiplayer">Multiplayer</div>
                 <div class="ai">AI</div>
             </div>
-            <form class="form">
+
+            <form class="multiplayer-form form">
                 <div class="form-info">
                     <div class="input-container">
                         <div class="player-1">
@@ -35,15 +36,30 @@
                         <label for="Player-2">Player Two's Name: </label>
                         <input type="text" placeholder="Enter Name" name="Player-2">
                         </div>
-                    </div>
+                     </div>
 
-                    <button id="form-submit-btn" type="submit">Start Game</button>
+                    <button id="multiplayer-submit-btn" type="submit">Start Game</button>
                 </div>
-
             </form>
+
+            <form class="ai-form form">
+                <div class="form-info">
+
+                    <div class="input-container">
+                        <div class="player-1">
+                            <label for="Player-1">Player One's Name: </label>
+                            <input type="text" placeholder="Enter Name" name="Player-1">
+                        </div>
+                    </div>
+                    <button id="ai-submit-btn" type="submit">Start Game</button>
+                </div>
+            </form>
+
         </div>
 
         <div id="notification-div"></div>
+
+        <div class="gameboard-and-player-container">
 
         <div id="player-turn">
             <div class="player1 current-turn">Player 1</div>
@@ -64,6 +80,8 @@
 
         <div class="btn">
             <button id="clear-btn">Restart</button>
+        </div>
+
         </div>
 
     </div>

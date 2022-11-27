@@ -17,7 +17,7 @@
 }
 
 body {
-    padding-top: 100px;
+    /* padding-top: 100px; */
     font-family: var(--font);
     background-color: rgb(246, 247, 247);
 }
@@ -35,7 +35,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    display: none;
+    /* display: none; */
 }
 
 .heading {
@@ -58,10 +58,6 @@ body {
     border: solid 3px black;
 }
 
-.form-display {
-    display: none;
-}
-
 .multiplayer:hover, .ai:hover {
     cursor: pointer;
 }
@@ -81,7 +77,7 @@ body {
     align-items: center;
 }
 
-.form-info {
+.form-info, .ai-form-info {
     width: 80%;
     height: 100%;
     display: flex;
@@ -89,10 +85,10 @@ body {
     justify-content: center;
     align-items: center;
     gap: 50px;
-    font-size: 32px;;
+    font-size: 32px;
 }
 
-.form-info input {
+.form-info input, .ai-form-info input {
     font-size: 30px;
     border-radius: 5px;
     border-style: none;
@@ -130,16 +126,17 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 40px;
 }
 
 
 /* Notification Div */
 
 #notification-div {
-    position: fixed;
-    top: 40px;
     font-weight: bold;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .oops-notif {
@@ -155,6 +152,15 @@ body {
 .nobody-wins {
     color: rgb(104, 107, 255);
     font-size: calc(var(--alert-font-size) * 1.4);
+}
+
+/* Gameboard and Player Container */
+
+.gameboard-and-player-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
 }
 
 
@@ -252,4 +258,10 @@ body {
 
 .disable-clicks {
     pointer-events: none;
+}
+
+
+/* Display: None */
+.yeet {
+    display: none;
 }

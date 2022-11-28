@@ -20,6 +20,7 @@ body {
     /* padding-top: 100px; */
     font-family: var(--font);
     background-color: rgb(246, 247, 247);
+    overflow: hidden;
 }
 
 /* Form Container */

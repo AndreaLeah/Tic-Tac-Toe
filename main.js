@@ -48,6 +48,9 @@ var events = {
         m: 'm',
         a: 'a',
 
+        mpBtnID: "#mp",
+        aiBtnID: "#ai",
+
         init: function() {
             this.cacheDOM();
             this.bindEvents();
@@ -64,13 +67,17 @@ var events = {
             this.player1Box = document.querySelector(this.player1);
             this.player2Box = document.querySelector(this.player2);
             this.formContainer = document.querySelector(this.formContainerClass);
+            this.mpBtn = document.querySelector(this.mpBtnID);
+            this.aiBtn = document.querySelector(this.aiBtnID);
         },
 
         bindEvents: function() {
             this.multiplayer.addEventListener('click', this.changeOption.bind(this));
             this.ai.addEventListener('click', this.changeOption.bind(this));
-            this.multiplayerForm.addEventListener('submit', this.mpGameInfo.bind(this));
-            this.aiForm.addEventListener('submit', this.aiGameInfo.bind(this));
+            // this.multiplayerForm.addEventListener('submit', this.mpGameInfo.bind(this));
+            // this.aiForm.addEventListener('submit', this.aiGameInfo.bind(this));
+            this.mpBtn.addEventListener('click', this.mpGameInfo.bind(this));
+            this.aiBtn.addEventListener('click', this.aiGameInfo.bind(this));
         },
 
         changeOption: function(e) {
@@ -101,7 +108,9 @@ var events = {
             
         },
 
-        mpGameInfo: function() {
+        mpGameInfo: function(event) {
+
+            event.preventDefault();
         
             let p1 = document.getElementById('p1').value;
             let p2 = document.getElementById('p2').value;
@@ -122,7 +131,11 @@ var events = {
 
         },
 
-        aiGameInfo: function() {
+        aiGameInfo: function(event) {
+
+            event.preventDefault();
+
+            
             let p3 = document.getElementById('p3').value;
             let p4 = 'AI';
 

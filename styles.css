@@ -16,13 +16,16 @@
 
 }
 
+html {
+    overflow: hidden;
+}
+
 body {
     font-family: var(--font);
     background-color: rgb(246, 247, 247);
     height: 100vh;
     width: 100vw;
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
 /* Form Container */

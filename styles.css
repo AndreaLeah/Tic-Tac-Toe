@@ -17,16 +17,16 @@
 }
 
 body {
-    /* padding-top: 100px; */
     font-family: var(--font);
     background-color: rgb(246, 247, 247);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 /* Form Container */
 
 .form-container {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     height: 100vh;
@@ -144,7 +144,6 @@ body {
 		box-shadow: 0 0 0 0 rgba(100, 26, 120, 0);
 	}
 }
-
 
 
 

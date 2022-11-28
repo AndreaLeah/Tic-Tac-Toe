@@ -26,6 +26,11 @@ var events = {
     }
   };
 
+
+
+
+  
+
 // Beginning Form Popup
 (function() {
     let formHandler = {
@@ -35,6 +40,13 @@ var events = {
         mForm: '.multiplayer-form',
         aForm: '.ai-form',
         yeet: 'yeet',
+        player1: '.player1',
+        player2: '.player2',
+
+        formContainerClass: '.form-container',
+
+        m: 'm',
+        a: 'a',
 
         init: function() {
             this.cacheDOM();
@@ -47,14 +59,18 @@ var events = {
             this.formPopup = document.querySelector('.form-container');
             this.multiplayer = document.querySelector('.multiplayer');
             this.ai = document.querySelector('.ai');
-            this.submitFormBtn = document.querySelector('#form-submit-btn');
             this.multiplayerForm = document.querySelector(this.mForm);
             this.aiForm = document.querySelector(this.aForm);
+            this.player1Box = document.querySelector(this.player1);
+            this.player2Box = document.querySelector(this.player2);
+            this.formContainer = document.querySelector(this.formContainerClass);
         },
 
         bindEvents: function() {
             this.multiplayer.addEventListener('click', this.changeOption.bind(this));
             this.ai.addEventListener('click', this.changeOption.bind(this));
+            this.multiplayerForm.addEventListener('submit', this.mpGameInfo.bind(this));
+            this.aiForm.addEventListener('submit', this.aiGameInfo.bind(this));
         },
 
         changeOption: function(e) {
@@ -85,12 +101,65 @@ var events = {
             
         },
 
+        mpGameInfo: function() {
+        
+            let p1 = document.getElementById('p1').value;
+            let p2 = document.getElementById('p2').value;
 
+            if (p1.length === 0) {
+                p1 = 'Player 1'
+            } 
+            if (p2.length === 0) {
+                p2 = "Player 2"
+            }
+
+            document.getElementById('p1').value = '';
+            document.getElementById('p2').value = '';
+
+            console.log(p1, p2);
+
+            this.injectNames(p1, p2);
+
+        },
+
+        aiGameInfo: function() {
+            let p3 = document.getElementById('p3').value;
+            let p4 = 'AI';
+
+            if (p3.length === 0) {
+                p3 = 'Player 1'
+            }
+
+            document.getElementById('p3').value = '';
+
+            console.log(p3);
+
+            this.injectNames(p3, p4);
+
+        },
+
+        injectNames: function(p1, p2) {
+
+            this.player1Box.innerText = p1;
+            this.player2Box.innerText = p2;
+
+            this.formTransition();
+
+        },
+
+        formTransition: function() {
+            this.formContainer.classList.add('transition');
+        },
 
     }
 
     formHandler.init();
 })();
+
+
+
+
+
 
 
 // Game Board Module

@@ -16,74 +16,84 @@
     <div id="main-container">
 
         <div class="form-container">
+
+            <div class="form-main-content">
             <div class="heading">
                 Tic-Tac-Toe
             </div>
             <div class="player-option">
                 <div class="multiplayer">Multiplayer</div>
                 <div class="ai">AI</div>
-            </div>
 
-            <form class="multiplayer-form form">
-                <div class="form-info">
-                    <div class="input-container">
-                        <div class="player-1">
-                        <label for="Player-1">Player One's Name: </label>
-                        <input type="text" placeholder="Enter Name" name="Player-1">
+         </div>
+
+
+                    <form class="multiplayer-form form" action="#">
+                        <div class="form-info">
+                            <div class="input-container">
+                                <div class="player-1">
+                                <label for="Player-1">Player One's Name: </label>
+                                <input id="p1" type="text" placeholder="Enter Name">
+                                </div>
+        
+                                <div class="player-2">
+                                <label for="Player-2">Player Two's Name: </label>
+                                <input id="p2" type="text" placeholder="Enter Name">
+                                </div>
+                             </div>
+    
+
+                             <button type="submit" id="mp">Start Game</button>
                         </div>
+                    </form>
 
-                        <div class="player-2">
-                        <label for="Player-2">Player Two's Name: </label>
-                        <input type="text" placeholder="Enter Name" name="Player-2">
-                        </div>
-                     </div>
-
-                    <button id="multiplayer-submit-btn" type="submit">Start Game</button>
-                </div>
-            </form>
+                
 
             <form class="ai-form form">
                 <div class="form-info">
-
                     <div class="input-container">
                         <div class="player-1">
-                            <label for="Player-1">Player One's Name: </label>
-                            <input type="text" placeholder="Enter Name" name="Player-1">
+                        <label for="Player-1">Player's Name: </label>
+                        <input id="p3" type="text" placeholder="Enter Name">
                         </div>
-                    </div>
-                    <button id="ai-submit-btn" type="submit">Start Game</button>
+                     </div>
+                    <button type="submit" id="ai">Start Game</button>
                 </div>
             </form>
 
+            </div>
         </div>
 
-        <div id="notification-div"></div>
+        <div class="main-content-container">
 
-        <div class="gameboard-and-player-container">
+            <div id="notification-div"></div>
 
-        <div id="player-turn">
-            <div class="player1 current-turn">Player 1</div>
-            <div class="player2">Player 2</div>
+            <div class="gameboard-and-player-container">
+
+            <div id="player-turn">
+                <div class="player1 current-turn">Player 1</div>
+                <div class="player2">Player 2</div>
+            </div>
+
+            <div id="gameboard">
+                <div id="0" class="board-squares s0"></div>
+                <div id="1" class="board-squares s1"></div>
+                <div id="2" class="board-squares s2"></div>
+                <div id="3" class="board-squares s3"></div>
+                <div id="4" class="board-squares s4"></div>
+                <div id="5" class="board-squares s5"></div>
+                <div id="6" class="board-squares s6"></div>
+                <div id="7" class="board-squares s7"></div>
+                <div id="8" class="board-squares s8"></div>
+            </div>
+
+            <div class="btn">
+                <button id="clear-btn">Restart</button>
+            </div>
+
+            </div>
+
         </div>
-
-        <div id="gameboard">
-            <div id="0" class="board-squares s0"></div>
-            <div id="1" class="board-squares s1"></div>
-            <div id="2" class="board-squares s2"></div>
-            <div id="3" class="board-squares s3"></div>
-            <div id="4" class="board-squares s4"></div>
-            <div id="5" class="board-squares s5"></div>
-            <div id="6" class="board-squares s6"></div>
-            <div id="7" class="board-squares s7"></div>
-            <div id="8" class="board-squares s8"></div>
-        </div>
-
-        <div class="btn">
-            <button id="clear-btn">Restart</button>
-        </div>
-
-        </div>
-
     </div>
     
 <script src="main.js"></script>

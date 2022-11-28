@@ -21,6 +21,8 @@ body {
     background-color: rgb(246, 247, 247);
     /* overflow-x: hidden;
     overflow-y: hidden; */
+    height: 100vh;
+    width: 100vw;
 }
 
 /* Form Container */
@@ -29,8 +31,8 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     background-color: white;
     z-index: 2;
 }
@@ -302,5 +304,10 @@ body {
     -webkit-transition: all 2s linear;
     transition: all 2s linear;
     visibility: hidden;
+}
+
+.main-content-container {
+    height: 100%;
+    width: 100%;
 }
 

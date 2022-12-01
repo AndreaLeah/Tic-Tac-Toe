@@ -1,8 +1,9 @@
 :root {
     --square-dimension: 200px;
-    --gameboard-dimension: calc(var(--square-dimension) * 3.03);
+    --gameboard-dimension: calc(var(--square-dimension) * 3);
+    --square-gap: 3px;
+    --gameboard-extra: calc(var(--square-gap) * 2);
     --sq-font-size: 120px;
-
     --clear-btn-height: 100px;
     --clear-btn-width: 400px;
     --clear-btn-font-size: 32px;
@@ -82,13 +83,13 @@ body {
 .form {
     display: flex;
     flex-direction: column;
-    background-color: #e0c6ff;
+    background-color: rgb(252, 242, 255);
     height: 400px;
     width: 800px;
     justify-content: center;
     align-items: center;
-    border-radius: 50px;
-    box-shadow: 0 0 10px 10px #e0c6ff;
+    border-radius: 20px;
+    box-shadow: 0 0 5px 5px #f1f1f1;
 }
 
 .form-info, .ai-form-info {
@@ -104,7 +105,7 @@ body {
 .form-info input, .ai-form-info input {
     font-size: 30px;
     border-radius: 5px;
-    border-style: none;
+    border-color: rgb(185, 185, 185);
 }
 
 .input-container {
@@ -123,9 +124,10 @@ body {
     border-radius: var(--border-radius);
     height: 70px;
     width: 400px;
-    background-color:rgb(100, 26, 120);
-    color: white;
+    background-color:rgb(224,198,255);
+    color: rgb(255, 255, 255);
     border: none;
+    box-shadow: rgba(0, 0, 0, 0.24) 2px 3px 4px;
 }
 
 .form-info button:hover {
@@ -137,7 +139,7 @@ body {
 @keyframes pulse {
 	0% {
 		transform: scale(0.95);
-		box-shadow: 0 0 0 0 rgba(100, 26, 120, 0.7);
+		box-shadow: 0 0 0 0 rgba(184, 125, 255, 0.7);
 	}
 
 	70% {
@@ -219,6 +221,7 @@ body {
     justify-content: center;
     align-items: center;
     border-radius: var(--btn-border-radius);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 .current-turn {
@@ -233,16 +236,17 @@ body {
     display: flex;
     align-items: flex;
     flex-wrap: wrap;
-    width: var(--gameboard-dimension);
+    width: calc(var(--gameboard-dimension) + var(--gameboard-extra));
     height: var(--gameboard-dimension);
     font-family: var(--gameboard-font);
+    gap: var(--square-gap);
+   
 }
 
 .board-squares {
     height: var(--square-dimension);
     width: var(--square-dimension);
     background-color: rgba(0, 0, 0, 0.2);
-    border: solid 1px white;
     font-size: var(--sq-font-size);
     display: flex;
     justify-content: center;
@@ -281,6 +285,7 @@ body {
     font-size: var(--clear-btn-font-size);
     border-radius: var(--btn-border-radius);
     border: none;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
 #clear-btn:hover {
